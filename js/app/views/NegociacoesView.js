@@ -1,18 +1,10 @@
-class NegociacoesView {
+class NegociacoesView extends View{
 	
 	constructor(elemento) {
+		super(elemento);
+	}	
 
-		this._elemento = elemento;
-
-	}
-
-	update(model) {
-
-		this._elemento.innerHTML = this._template(model);
-
-	}
-
-	_template(model) {
+	template(model) {
 
 		// Nesse template é usado a função reduce() [Array.prototype.reduce(function(acumulador, valorAtual, indice, array){ } )]
 		// https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
