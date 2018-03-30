@@ -10,7 +10,7 @@ class DateHelper {
 	static textToDate(text) {
 
 
-		if (! /\d{4}-\d{2}-\d{2}/.test(text)) { 
+		if (! /^\d{4}-\d{2}-\d{2}$/.test(text)) { 
 			throw new Error("Data Incorreta, o padrão é yyyy-mm-dd"); 
 		}
 
