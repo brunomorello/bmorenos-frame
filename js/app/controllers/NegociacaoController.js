@@ -24,8 +24,6 @@ class NegociacaoController {
 
 		this._negociacoesView.update(this._listaNegociacoes);
 
-		//console.log('data formatada ' + DateHelper.dateToText(negociacao.data));
-
 		this._limpaFormulario();
 
 	}
