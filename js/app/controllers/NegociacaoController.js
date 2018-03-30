@@ -16,24 +16,28 @@ class NegociacaoController {
 		
 		event.preventDefault();	
 
-		// convertendo a string data em um objeto data
-		// sera usado:
-		// spread operator - https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Spread_operator
-		// arrow function - https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-
-		let data = new Date(
-			...this._inputData.value
-				.split("-")
-				.map( (item, index) => item - index % 2)
-				// item - index % 2 (pois o mes usado na funcao date deve ser mes atual -1)
-		);
-
 		// criando uma nova negociacao
 		let negociacao = new Negociacao (
-			data,
+			DateHelper.textToDate(this._inputData.value),
 			this._inputQuantidade.value,
 			this._inputValor.value
 		);
+
+		console.log(negociacao);
+		console.log('data formatada ' + DateHelper.dateToText(negociacao.data));
+
+		this.limpaCampos();
+
+	}
+
+
+	limpaCampos() {
+
+		this._inputData.value = "";
+		this._inputQuantidade.value = 1;
+		this._inputValor.value = 0.0;
+
+		this._inputData.focus();
 
 	}
 
