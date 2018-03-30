@@ -9,6 +9,9 @@ class NegociacaoController {
 		this._inputQuantidade = selector("#quantidade");
 		this._inputValor = selector("#valor");
 		this._listaNegociacoes = new ListaNegociacoes();
+		this._negociacoesView = new NegociacoesView(selector("#NegociacoesView"));
+
+		this._negociacoesView.update(this._listaNegociacoes);
 
 	}
 
@@ -19,7 +22,8 @@ class NegociacaoController {
 
 		this._listaNegociacoes.adicionar(this._criarNegociacao());
 
-		console.log(this._listaNegociacoes.negociacoes);
+		this._negociacoesView.update(this._listaNegociacoes);
+
 		//console.log('data formatada ' + DateHelper.dateToText(negociacao.data));
 
 		this._limpaFormulario();
