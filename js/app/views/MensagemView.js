@@ -1,9 +1,4 @@
-class MensagemView extends View{
-	
-
-	constructor(elemento) {
-		super(elemento);
-	}
+class MensagemView extends View{	
 
 	template(model) {
 
