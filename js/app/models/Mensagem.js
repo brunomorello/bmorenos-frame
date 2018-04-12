@@ -6,11 +6,11 @@ class Mensagem {
 
 	}
 
-	get mensagem() {
+	get texto() {
 		return this._texto;
 	}
 
-	set mensagem(texto) {
+	set texto(texto) {
 		this._texto = texto;
 	} 
 
