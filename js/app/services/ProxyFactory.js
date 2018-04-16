@@ -41,8 +41,9 @@ class ProxyFactory {
 						console.log(arguments);
 
 
-						Reflect.apply(target[prop], target, arguments);
-						return action(target);
+						let retorno = Reflect.apply(target[prop], target, arguments);
+						action(target);
+						return retorno;
 
 					}
 
@@ -66,13 +67,13 @@ class ProxyFactory {
 				console.log(`Debug Proxy.set: parametro target[${receiver}]`);
 				console.log(receiver);
 							
-				if(props.includes(prop)) {
+				let retorno = Reflect.set(target, prop, value, receiver);
 
-					target[prop] = value;
+				if(props.includes(prop)) {
 					action(target);
 				}
 
-				return Reflect.set(target, prop, value, receiver);
+				return retorno;
 
 			}
 
