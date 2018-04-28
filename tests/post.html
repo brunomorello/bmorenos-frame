@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Teste Post Negociação</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.css">	
+</head>
+<body class="container">
+
+	<h1 class="text-center">Negociacoes Teste - Post</h1>
+
+	<form class="form">
+		
+		<div class="form-group">
+			<label for="data">Data</label>
+			<input type="date" id="data" class="form-control" required autofocus="">
+		</div>
+
+		<div class="form-group">
+			<label for="quantidade">Quantidade</label>
+			<input type="number" id="quantidade" class="form-control" min="1" step="1" value="1" required>
+		</div>
+
+		<div class="form-group">
+			<label for="valor">Valor</label>
+			<input type="number" id="valor" class="form-control" min="0.01" step="0.01" value="0.0" required>
+		</div>
+
+		<button class="btn btn-primary" type="submit" onclick="postNegociacao(event)">Postar Negociacao</button>
+
+	</form>
+
+	<script src="../js/app/helpers/DateHelper.js"></script>
+
+	<script>
+		
+		function postNegociacao(event) {
+
+			event.preventDefault();
+
+			let inputData = document.querySelector("#data");
+			console.log(`inputData=${inputData.value}`);
+
+			let inputQuantidade = document.querySelector("#quantidade");
+			console.log(`inputQuantidade=${inputQuantidade.value}`);
+
+			let inputValor = document.querySelector("#valor");
+			console.log(`inputValor=${inputValor.value}`);
+
+			//criando um ojeto de negociacao
+			let negociacao = {
+				data: DateHelper.textToDate(inputData.value),
+				quantidade: inputQuantidade.value,
+				valor: inputValor.value
+			};
+
+			console.log('Negociacao criada');
+			console.log(negociacao);
+
+			let xhr = new XMLHttpRequest();
+
+			xhr.open('POST', '/negociacoes', true);
+			xhr.setRequestHeader('Content-type', 'application/json');
+
+			xhr.onreadystatechange = () => {
+
+				if(xhr.readyState = 4) {
+
+					if(xhr.status == 200) {
+						inputData.value = '';
+						inputQuantidade.value = '1';
+						inputValor.value = '0.0';
+						inputData.focus();
+					} else {
+						console.log('erro para criar uma negociacao');
+					}
+
+				}
+
+			}
+			console.log(JSON.stringify(negociacao));
+
+			xhr.send(JSON.stringify(negociacao));
+
+		}
+
+	</script>
+
+
+</body>
+</html>
