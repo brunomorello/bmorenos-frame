@@ -6,42 +6,47 @@ class NegociacaoService {
 		A convenção é que cada callback receba sempre o erro no primeiro parâmetro. 
 		Na função callback, basta então verificar esse parâmetro para saber se ocorreu um erro ou não!
 	*/
-	getNegociacoesSemana(cb) {
+	getNegociacoesSemana() {
 
-		let xhr = new XMLHttpRequest();
+		return new Promise((resolve, reject) => {
 
-		xhr.open('GET', 'negociacoes/semana');
+			let xhr = new XMLHttpRequest();
 
-		xhr.onreadystatechange = () => {
+			xhr.open('GET', 'negociacoes/semana');
 
-			/*
-				1 - Conexao com o servidor estabelecida
-				2 - Requisicao recebida
-				3 - Processando requisicao
-				4 - Requisicao concluida e resposta pronta
-			*/
+			xhr.onreadystatechange = () => {
 
-			if(xhr.readyState == 4) {
+				/*
+					1 - Conexao com o servidor estabelecida
+					2 - Requisicao recebida
+					3 - Processando requisicao
+					4 - Requisicao concluida e resposta pronta
+				*/
 
-				if(xhr.status == 200) {
+				if(xhr.readyState == 4) {
 
-					console.log('Obtendo os dados do servidor');
+					if(xhr.status == 200) {
 
-					cb(null, JSON.parse(xhr.responseText)
-								.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
+						console.log('Obtendo os dados do servidor');
 
-				} else {
+						resolve(JSON.parse(xhr.responseText)
+									.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
 
-					console.log(`Não foi possível obter as negociações do servidor - error: ${xhr.status}`);
-					cb(`Não foi possível obter as negociações do servidor`, null);
+					} else {
+
+						console.log(`Não foi possível obter as negociações do servidor - error: ${xhr.status}`);
+						reject(`Não foi possível obter as negociações do servidor`);
+
+					}
 
 				}
 
 			}
+			
+			xhr.send();
+			
+		});
 
-		}
-		
-		xhr.send();
 	}
 
 }
