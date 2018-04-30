@@ -49,9 +49,7 @@ class NegociacaoController {
 
 		let negociacoesWS = new NegociacaoService();
 
-		let promise = negociacoesWS.getNegociacoesSemana();
-
-		promise
+		negociacoesWS.getNegociacoesSemana()
 			.then(negociacoes => {
 				negociacoes.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao))
 			})
