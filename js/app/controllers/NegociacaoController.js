@@ -49,6 +49,15 @@ class NegociacaoController {
 
 		let negociacoesWS = new NegociacaoService();
 
+		let promise = negociacoesWS.getNegociacoesSemana();
+
+		promise
+			.then(negociacoes => {
+				negociacoes.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao))
+			})
+			.catch(error => this._mensagem.texto = error);
+
+		/*
 		// o método abaixo possui Error-First-Callback
 		negociacoesWS.getNegociacoesSemana((erro, negociacoes) => {
 
@@ -61,7 +70,8 @@ class NegociacaoController {
 			this._mensagem.texto = "Negociações inseridas com sucesso.";
 
 		});
-
+		*/
+	
 	}
 
 
