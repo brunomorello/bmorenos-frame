@@ -81,8 +81,8 @@ class NegociacaoService {
 			this._httpService
 				.get(url)
 				.then(negociacoes => {
-					console.log('negociacoes/anterior service');
-					console.log(negociacoes)
+					//console.log('negociacoes/anterior service');
+					//console.log(negociacoes)
 					
 					resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
 				})
