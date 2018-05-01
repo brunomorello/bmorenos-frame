@@ -49,28 +49,23 @@ class NegociacaoController {
 
 		let negociacoesWS = new NegociacaoService();
 
-		let promise = negociacoesWS.getNegociacoesSemana();
+		let periodosNegociacao = [];
 
-		promise
+		periodosNegociacao.push(negociacoesWS.getNegociacoesSemana());
+		periodosNegociacao.push(negociacoesWS.getNegociacoesSemanaAnterior());
+		periodosNegociacao.push(negociacoesWS.getNegociacoesSemanaRetrasada());
+
+		Promise.all(periodosNegociacao)
 			.then(negociacoes => {
-				negociacoes.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao))
+				//console.log('Promise.all.then = ' + negociacoes);
+
+				negociacoes
+					.reduce((arrayAchatado, array) => arrayAchatado.concat(array), [])
+					.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao));
+
+				this._mensagem.texto = "Negociações adicionadas com sucesso";
 			})
-			.catch(error => this._mensagem.texto = error);
-
-		/*
-		// o método abaixo possui Error-First-Callback
-		negociacoesWS.getNegociacoesSemana((erro, negociacoes) => {
-
-			if(erro) {
-				this._mensagem.texto = erro;
-				return;
-			}
-
-			negociacoes.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao));
-			this._mensagem.texto = "Negociações inseridas com sucesso.";
-
-		});
-		*/
+			.catch(errorMsg => this._mensagem.texto = errorMsg);
 	
 	}
 
