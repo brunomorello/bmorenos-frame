@@ -10,8 +10,6 @@ class ListaNegociacoes {
 		this._negociacoes.push(negociacao);
 	}
 
-
-
 	esvaziar() {
 
 		this._negociacoes = [];
