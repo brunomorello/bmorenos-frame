@@ -49,6 +49,9 @@ class NegociacaoController {
 
 	importaNegociacoes() {
 
+		// o motivo de usar let:
+		// usamos var quando queremos que a variável tenha escopo global ou de função
+		// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
 		let negociacoesWS = new NegociacaoService();
 
 		let periodosNegociacao = [];
