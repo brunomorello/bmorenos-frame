@@ -12,12 +12,13 @@ class NegociacaoController {
 		//this._listaNegociacoes = new ListaNegociacoes(model => 		
 		//	this._negociacoesView.update(model)
 		//);
+		this._ordemAtual = '';
 
 		//Tecnica de data binding (associação de dados)
 		this._listaNegociacoes = new Bind(
 			new ListaNegociacoes(),
 			new NegociacoesView(selector("#NegociacoesView")),
-			'adicionar', 'esvaziar'
+			'adicionar', 'esvaziar', 'ordena', 'inverteOrdem'
 		);
 
 		this._mensagem = new Bind(
@@ -71,6 +72,14 @@ class NegociacaoController {
 	}
 
 	ordena(coluna) {
+
+		if(this._ordemAtual == coluna) {
+			this._listaNegociacoes.inverteOrdem();
+		} else {
+			this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);
+		}
+
+		this._ordemAtual = coluna;
 
 	}
 
