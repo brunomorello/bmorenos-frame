@@ -13,6 +13,7 @@ class NegociacaoController {
 		//	this._negociacoesView.update(model)
 		//);
 
+		//Tecnica de data binding (associação de dados)
 		this._listaNegociacoes = new Bind(
 			new ListaNegociacoes(),
 			new NegociacoesView(selector("#NegociacoesView")),
@@ -60,7 +61,7 @@ class NegociacaoController {
 				//console.log('Promise.all.then = ' + negociacoes);
 
 				negociacoes
-					.reduce((arrayAchatado, array) => arrayAchatado.concat(array), [])
+					.reduce((arrayAchatado, array) => arrayAchatado.concat(array, []))
 					.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao));
 
 				this._mensagem.texto = "Negociações adicionadas com sucesso";
@@ -69,6 +70,9 @@ class NegociacaoController {
 	
 	}
 
+	ordena(coluna) {
+
+	}
 
 	_criarNegociacao() {
 

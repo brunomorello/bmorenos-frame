@@ -1,6 +1,5 @@
 class NegociacaoService {
 
-	
 	/*
 		Recebe uma função callback baseada em Error-First-Callback
 
