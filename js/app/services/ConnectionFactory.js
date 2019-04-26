@@ -6,6 +6,8 @@ var ConnectionFactory = (function () {
     var databaseStores = ['negotiations'];
     
     var connection = null;
+
+    var closeConnection = null;
     
     return class ConnectionFactory {
     
@@ -28,11 +30,18 @@ var ConnectionFactory = (function () {
                 
                 openRequest.onsuccess = data => {
                     
-                    if(!connection) connection = data.target.result;
-    
-                    // Monkey Patch to block users to close a connection
-                    connection.close = function () {
-                        throw new Error(`You cannot close a connection directly`);
+                    if(!connection) {
+                        
+                        connection = data.target.result;
+
+                        // Create a Bind to Connection and save the function to close a connection
+                        closeConnection = connection.close.bind(connection);
+        
+                        // Monkey Patch to block users to close a connection
+                        connection.close = function () {
+                            throw new Error(`You cannot close a connection directly`);
+                        }
+                        
                     }
 
                     resolve(connection);
@@ -63,6 +72,15 @@ var ConnectionFactory = (function () {
     
             });
     
+        }
+
+        static close() {
+
+            if(connection) {
+                closeConnection();
+                connection = null;
+            }
+
         }
     }
 
