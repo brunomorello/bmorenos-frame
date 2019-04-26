@@ -1,9 +1,9 @@
 // Applied Module Pattern
 var ConnectionFactory = (function () {
 
-    var databaseName = 'bmorenos-frame';
-    var databaseVersion = 1;
-    var databaseStores = ['negotiations'];
+    const databaseName = 'bmorenos-frame';
+    const databaseVersion = 1;
+    const databaseStores = ['negotiations'];
     
     var connection = null;
 
