@@ -1,55 +1,64 @@
-var databaseName = 'bmorenos-frame';
-var databaseVersion = 1;
-var databaseStores = ['negotiations'];
+// Applied Module Pattern
+var ConnectionFactory = (function () {
 
-class ConnectionFactory {
-
-    // avoiding developers to create instances of this class
-    constructor() {
-        throw new Error(`Create Instances of ConnectionFactory is not allowed`);
-    }
-
-    static getConnection() {
-
-        return new Promise((resolve, reject) => {
-
-            let openRequest = window.indexedDB.open(databaseName, databaseVersion);
-
-            openRequest.onupgradeneeded = data => {
-
-                ConnectionFactory._createStores(data.target.result);
-                
-            };
-            
-            openRequest.onsuccess = data => {
-                
-                resolve(data.target.result);
-
-            };
-            
-            openRequest.onerror = data => {
-
-                console.log(`error to get connection ${data.target.error}`);
-
-                reject(data.target.error.name);
-                
-            };
-            
-        });
-
-    }
+    var databaseName = 'bmorenos-frame';
+    var databaseVersion = 1;
+    var databaseStores = ['negotiations'];
     
-    static _createStores(connection) {
+    var connection = null;
+    
+    return class ConnectionFactory {
+    
+        // avoiding developers to create instances of this class
+        constructor() {
+            throw new Error(`Create Instances of ConnectionFactory is not allowed`);
+        }
+    
+        static getConnection() {
+    
+            return new Promise((resolve, reject) => {
+    
+                let openRequest = window.indexedDB.open(databaseName, databaseVersion);
+    
+                openRequest.onupgradeneeded = data => {
+    
+                    ConnectionFactory._createStores(data.target.result);
+                    
+                };
+                
+                openRequest.onsuccess = data => {
+                    
+                    if(!connection) connection = data.target.result;
+    
+                    resolve(connection);
+    
+                };
+                
+                openRequest.onerror = data => {
+    
+                    console.log(`error to get connection ${data.target.error}`);
+    
+                    reject(data.target.error.name);
+                    
+                };
+                
+            });
+    
+        }
         
-        databaseStores.forEach(store => {
-
-            if(connection.objectStoreNames.contains(store)) {
-                connection.deleteObjectStore(store);
-            }
-
-            connection.createObjectStore(store, { autoIncrement: true });
-
-        });
-
+        static _createStores(connection) {
+            
+            databaseStores.forEach(store => {
+    
+                if(connection.objectStoreNames.contains(store)) {
+                    connection.deleteObjectStore(store);
+                }
+    
+                connection.createObjectStore(store, { autoIncrement: true });
+    
+            });
+    
+        }
     }
-}
+
+}) ();
