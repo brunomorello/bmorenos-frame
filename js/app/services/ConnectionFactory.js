@@ -30,6 +30,11 @@ var ConnectionFactory = (function () {
                     
                     if(!connection) connection = data.target.result;
     
+                    // Monkey Patch to block users to close a connection
+                    connection.close = function () {
+                        throw new Error(`You cannot close a connection directly`);
+                    }
+
                     resolve(connection);
     
                 };
