@@ -55,7 +55,11 @@ class NegociacaoController {
 			.then(dao => dao.getLocalNegotiations())
 			.then((negociacoes) => 
 				negociacoes.forEach(negociacao =>
-					this._listaNegociacoes.adicionar(negociacao)));
+					this._listaNegociacoes.adicionar(negociacao)))
+			.catch(error => {
+				console.log(`Error to get Local Negotiations`);
+				this._mensagem.texto = `Erro para carregar Negociações Localmente ${error}`;
+			});
 
 	}
 
