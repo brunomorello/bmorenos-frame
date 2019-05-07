@@ -27,6 +27,26 @@ class NegociacaoController {
 			'texto'
 		);
 
+
+		// Fillout Negotiations List with Local Data
+		ConnectionFactory.getConnection()
+			.then(connection => {
+
+				new NegociacaoDao(connection)
+					.getLocalNegotiations()
+					.then((negociacoes) => {
+
+						negociacoes.forEach(negociacao => {
+
+							this._listaNegociacoes.adicionar(negociacao);
+
+						});
+
+					})
+					.catch(error => this._mensagem.texto = `Erro para carregar as Negociações Localmente: ${error}`);
+
+			})
+
 	}
 
 
@@ -34,9 +54,23 @@ class NegociacaoController {
 		
 		event.preventDefault();	
 
-		this._listaNegociacoes.adicionar(this._criarNegociacao());
-		this._mensagem.texto = "Negociacao Adicionada com Sucesso!";
-		this._limpaFormulario();
+		ConnectionFactory.getConnection()
+			.then(connection => {
+
+				let negociacao = this._criarNegociacao();
+
+				new NegociacaoDao(connection)
+					.add(negociacao)
+					.then(() => {
+						this._listaNegociacoes.adicionar(this._criarNegociacao());
+						this._mensagem.texto = "Negociacao Adicionada com Sucesso!";
+						this._limpaFormulario();
+					})
+					.catch(error => {
+						this._mensagem.texto = `Erro para adicionar a Negociacao ${error}`;
+					})
+			})
+			.catch(error => this._mensagem.texto = error);
 
 	}
 
@@ -90,8 +124,8 @@ class NegociacaoController {
 
 		return new Negociacao (
 			DateHelper.textToDate(this._inputData.value),
-			this._inputQuantidade.value,
-			this._inputValor.value
+			parseInt(this._inputQuantidade.value),
+			parseFloat(this._inputValor.value)
 		);
 
 	}
