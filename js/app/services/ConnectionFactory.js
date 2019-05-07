@@ -8,6 +8,16 @@ var ConnectionFactory = (function () {
     var connection = null;
 
     var closeConnection = null;
+
+    /*
+
+        #####################
+
+            Framework for IndexedDB https://dexie.org/
+        
+        #####################
+
+    */
     
     return class ConnectionFactory {
     
