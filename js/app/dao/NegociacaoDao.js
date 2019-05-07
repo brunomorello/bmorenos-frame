@@ -70,4 +70,21 @@ class NegociacaoDao {
 
     }
 
+    deleteAllLocalNegotiations() {
+
+        return new Promise((resolve, reject) => {
+
+            let request = this._connection
+                .transaction([this._store], 'readwrite')
+                .objectStore(this._store)
+                .clear();
+
+            request.onsuccess = e => resolve('Success to delete all negotiations stored locally');
+
+            request.onerror = e => reject(`Error to delete all negotiations stored locally ${e.target.error}`);
+
+        })
+
+    }
+
 }
