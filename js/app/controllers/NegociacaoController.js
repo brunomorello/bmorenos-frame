@@ -90,8 +90,18 @@ class NegociacaoController {
 
 	apagar() {
 
-		this._listaNegociacoes.esvaziar();
-		this._mensagem.texto = "Negociações apagadas com sucesso!";
+
+		ConnectionFactory.getConnection()
+			.then(connection => new NegociacaoDao(connection))
+			.then(dao => dao.deleteAllLocalNegotiations())
+			.then(() => {
+				this._listaNegociacoes.esvaziar();
+				this._mensagem.texto = "Negociações apagadas com sucesso!";
+			})
+			.catch((error) => {
+				console.log(`Error to delete Negotiations ${error}`);
+				this._mensagem.texto = `Erro para apagar as Negociações ${error}`;				
+			});
 
 	}
 
