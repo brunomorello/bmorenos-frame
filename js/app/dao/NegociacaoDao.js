@@ -17,7 +17,7 @@ class NegociacaoDao {
                 .store.add(negotiation);
             
             request.onsuccess = e => {
-                //console.log(`success to insert object`);
+                //console.log(`success to insert object`); 
                 resolve();
             };
 
