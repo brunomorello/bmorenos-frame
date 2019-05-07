@@ -14,7 +14,7 @@ class NegociacaoDao {
             let request = this._connection
                 .transaction([this._store], 'readwrite')
                 .objectStore(this._store)
-                .store.add(negotiation);
+                .add(negotiation);
             
             request.onsuccess = e => {
                 //console.log(`success to insert object`); 
