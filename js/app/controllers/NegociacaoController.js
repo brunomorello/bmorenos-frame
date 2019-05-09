@@ -27,18 +27,17 @@ class NegociacaoController {
 			'texto'
 		);
 
-		
+		// API for trades
+		this._service = new NegociacaoService();
+
 		this._init();
 
 	}
 
 	_init() {
 
-		// API for trades
-		let negociacoesWS = new NegociacaoService();
-
 		// lists all trades stored locally
-		negociacoesWS.listar()
+		this._service.listar()
 				.then(negociacoes => 
 					negociacoes.forEach(negociacao =>
 						this._listaNegociacoes.adicionar(negociacao)
@@ -61,12 +60,9 @@ class NegociacaoController {
 
 		// new trade created
 		let negociacao = this._criarNegociacao();
-		
-		// API for trades
-		let negociacoesWS = new NegociacaoService();
 
 		// adding trade using API
-		negociacoesWS.adicionar(negociacao)
+		this._service.adicionar(negociacao)
 			.then((msg) => {
 				this._listaNegociacoes.adicionar(negociacao);
 				this._mensagem.texto = msg;
@@ -78,11 +74,8 @@ class NegociacaoController {
 
 	apagar() {
 
-		// API for trades
-		let negociacoesWS = new NegociacaoService();
-
 		// clean all trades on list of trades
-		negociacoesWS.removerTodas()
+		this._service.removerTodas()
 			.then((msg) => {
 				this._listaNegociacoes.esvaziar();
 				this._listaNegociacoes.texto = msg;
@@ -96,9 +89,8 @@ class NegociacaoController {
 		// o motivo de usar let:
 		// usamos var quando queremos que a variável tenha escopo global ou de função
 		// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
-		let negociacoesWS = new NegociacaoService();
 
-		negociacoesWS.getNegociacoes()
+		this._service.getNegociacoes()
 			.then(negociacoes =>
 				negociacoes.filter(negociacao => 
 					!this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
