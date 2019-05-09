@@ -141,5 +141,38 @@ class NegociacaoService {
 		})
 
 	}
-	
+
+	adicionar(negociacao) {
+		
+		return ConnectionFactory.getConnection()
+			.then(connection => new NegociacaoDao(connection))
+			.then(dao => dao.add(negociacao))
+			.then(() => 'Negociação cadastrada com sucesso')
+			.catch(error => {
+				
+				console.log(`Error to create a new trade ${error}`);
+				
+				throw new Error('Erro para cadastrar uma nova negociação');
+
+			})
+
+	}
+
+	removerTodas() {
+
+		return ConnectionFactory.getConnection()
+			.then(connection => new NegociacaoDao(connection))
+			.then(dao => dao.deleteAllLocalNegotiations())
+			.then(() => 'Foram removidas todas as negociações')
+			.catch((error) => {
+				console.log(`Error to delete Negotiations ${error}`);
+				throw new Error(`Erro para apagar as Negociações ${error}`);
+			});		
+
+	}
+
+	listar() {
+		
+	}
+
 }
