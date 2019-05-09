@@ -172,7 +172,37 @@ class NegociacaoService {
 	}
 
 	listar() {
-		
+
+		// Fillout Negotiations List with Local Data
+		/* Verbose Mode:
+			ConnectionFactory.getConnection()
+				.then(connection => {
+
+					new NegociacaoDao(connection)
+						.getLocalNegotiations()
+						.then((negociacoes) => {
+
+							negociacoes.forEach(negociacao => {
+
+								this._listaNegociacoes.adicionar(negociacao);
+
+							});
+
+						})
+						.catch(error => this._mensagem.texto = `Erro para carregar as Negociações Localmente: ${error}`);
+
+				})
+		*/
+
+		return ConnectionFactory.getConnection()
+			.then(connection => new NegociacaoDao(connection))
+			.then(dao => dao.getLocalNegotiations())
+			.then((negociacoes) => negociacoes)
+			.catch(error => {
+				console.log(`Error to get Local Negotiations`);
+				this._mensagem.texto = `Erro para carregar Negociações Localmente ${error}`;
+			});		
+
 	}
 
 }
