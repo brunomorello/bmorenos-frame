@@ -197,10 +197,8 @@ class NegociacaoService {
 		return ConnectionFactory.getConnection()
 			.then(connection => new NegociacaoDao(connection))
 			.then(dao => dao.getLocalNegotiations())
-			.then((negociacoes) => negociacoes)
 			.catch(error => {
-				console.log(`Error to get Local Negotiations`);
-				this._mensagem.texto = `Erro para carregar Negociações Localmente ${error}`;
+				console.log(`Error to get Local Negotiations ${error}`);
 			});		
 
 	}
