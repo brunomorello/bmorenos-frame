@@ -90,21 +90,13 @@ class NegociacaoController {
 		// usamos var quando queremos que a variável tenha escopo global ou de função
 		// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
 
-		this._service.getNegociacoes()
-			.then(negociacoes =>
-				negociacoes.filter(negociacao => 
-					!this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
-						JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)
-					)	
-				)	
-			)
+		this._service.importarDaAPI(this._listaNegociacoes)
 			.then(negociacoes => {
 				negociacoes.forEach(negociacao => {
 					this._listaNegociacoes.adicionar(negociacao);
-					this._mensagem.texto = 'Negotiation Added';
 				})
 			})
-			.catch(error => this._mensagem.texto = error);
+			.catch(error => this._mensagem.texto = error);	
 	
 	}
 
