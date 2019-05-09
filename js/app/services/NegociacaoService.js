@@ -166,7 +166,7 @@ class NegociacaoService {
 			.then(() => 'Foram removidas todas as negociações')
 			.catch((error) => {
 				console.log(`Error to delete Negotiations ${error}`);
-				throw new Error(`Erro para apagar as Negociações ${error}`);
+				throw new Error('Erro para apagar as Negociações');
 			});		
 
 	}
@@ -199,6 +199,7 @@ class NegociacaoService {
 			.then(dao => dao.getLocalNegotiations())
 			.catch(error => {
 				console.log(`Error to get Local Negotiations ${error}`);
+				throw new Error('Erro para carregar Negociações Localmente');
 			});		
 
 	}

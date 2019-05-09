@@ -44,7 +44,7 @@ class NegociacaoController {
 						this._listaNegociacoes.adicionar(negociacao)
 					)
 				)
-			.catch(error => this._mensagem.texto = 'Erro para carregar Negociações Localmente');
+			.catch(error => this._mensagem.texto = error);
 
 		// Set a Time interval to import negotiations
 		setInterval(() => {
