@@ -204,4 +204,21 @@ class NegociacaoService {
 
 	}
 
+	importarDaAPI(listaNegociacoes) {
+
+		return this.getNegociacoes()
+			.then(negociacoes =>
+				negociacoes.filter(negociacao =>
+					!listaNegociacoes.negociacoes.some(negociacaoExistente =>
+						JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)
+					)
+				)
+			)
+			.catch(error => {
+				console.log(`Error to import trades from API ${error}`);
+				throw new Error('Erro para importar as negociações através da API');				
+			})	
+
+	}
+
 }
