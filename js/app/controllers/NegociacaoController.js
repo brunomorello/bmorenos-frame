@@ -34,38 +34,17 @@ class NegociacaoController {
 
 	_init() {
 
-		// Fillout Negotiations List with Local Data
-		/* Verbose Mode:
-			ConnectionFactory.getConnection()
-				.then(connection => {
+		// API for trades
+		let negociacoesWS = new NegociacaoService();
 
-					new NegociacaoDao(connection)
-						.getLocalNegotiations()
-						.then((negociacoes) => {
-
-							negociacoes.forEach(negociacao => {
-
-								this._listaNegociacoes.adicionar(negociacao);
-
-							});
-
-						})
-						.catch(error => this._mensagem.texto = `Erro para carregar as Negociações Localmente: ${error}`);
-
-				})
-		*/
-
-		// Clean way to use Promises
-		ConnectionFactory.getConnection()
-			.then(connection => new NegociacaoDao(connection))
-			.then(dao => dao.getLocalNegotiations())
-			.then((negociacoes) =>
-				negociacoes.forEach(negociacao =>
-					this._listaNegociacoes.adicionar(negociacao)))
-			.catch(error => {
-				console.log(`Error to get Local Negotiations`);
-				this._mensagem.texto = `Erro para carregar Negociações Localmente ${error}`;
-			});
+		// lists all trades stored locally
+		negociacoesWS.listar()
+				.then(negociacoes => 
+					negociacoes.forEach(negociacao =>
+						this._listaNegociacoes.adicionar(negociacao)
+					)
+				)
+			.catch(error => this._mensagem.texto = 'Erro para carregar Negociações Localmente');
 
 		// Set a Time interval to import negotiations
 		setInterval(() => {
