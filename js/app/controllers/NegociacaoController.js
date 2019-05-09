@@ -27,6 +27,12 @@ class NegociacaoController {
 			'texto'
 		);
 
+		
+		this._init();
+
+	}
+
+	_init() {
 
 		// Fillout Negotiations List with Local Data
 		/* Verbose Mode:
@@ -53,7 +59,7 @@ class NegociacaoController {
 		ConnectionFactory.getConnection()
 			.then(connection => new NegociacaoDao(connection))
 			.then(dao => dao.getLocalNegotiations())
-			.then((negociacoes) => 
+			.then((negociacoes) =>
 				negociacoes.forEach(negociacao =>
 					this._listaNegociacoes.adicionar(negociacao)))
 			.catch(error => {
@@ -61,47 +67,48 @@ class NegociacaoController {
 				this._mensagem.texto = `Erro para carregar Negociações Localmente ${error}`;
 			});
 
-	}
+		// Set a Time interval to import negotiations
+		setInterval(() => {
 
+			this.importaNegociacoes();
+
+		}, 5000);
+
+	}
 
 	adiciona(event) {
 		
 		event.preventDefault();	
 
-		ConnectionFactory.getConnection()
-			.then(connection => {
+		// new trade created
+		let negociacao = this._criarNegociacao();
+		
+		// API for trades
+		let negociacoesWS = new NegociacaoService();
 
-				let negociacao = this._criarNegociacao();
-
-				new NegociacaoDao(connection)
-					.add(negociacao)
-					.then(() => {
-						this._listaNegociacoes.adicionar(this._criarNegociacao());
-						this._mensagem.texto = "Negociacao Adicionada com Sucesso!";
-						this._limpaFormulario();
-					})
-					.catch(error => {
-						this._mensagem.texto = `Erro para adicionar a Negociacao ${error}`;
-					})
+		// adding trade using API
+		negociacoesWS.adicionar(negociacao)
+			.then((msg) => {
+				this._listaNegociacoes.adicionar(negociacao);
+				this._mensagem.texto = msg;
+				this._limpaFormulario();
 			})
-			.catch(error => this._mensagem.texto = error);
+			.catch(error => this._mensagem.texto = error);		
 
 	}
 
 	apagar() {
 
+		// API for trades
+		let negociacoesWS = new NegociacaoService();
 
-		ConnectionFactory.getConnection()
-			.then(connection => new NegociacaoDao(connection))
-			.then(dao => dao.deleteAllLocalNegotiations())
-			.then(() => {
+		// clean all trades on list of trades
+		negociacoesWS.removerTodas()
+			.then((msg) => {
 				this._listaNegociacoes.esvaziar();
-				this._mensagem.texto = "Negociações apagadas com sucesso!";
+				this._listaNegociacoes.texto = msg;
 			})
-			.catch((error) => {
-				console.log(`Error to delete Negotiations ${error}`);
-				this._mensagem.texto = `Erro para apagar as Negociações ${error}`;				
-			});
+			.catch(error => this._mensagem.texto = error);
 
 	}
 
