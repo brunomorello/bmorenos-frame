@@ -112,23 +112,21 @@ class NegociacaoController {
 		// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
 		let negociacoesWS = new NegociacaoService();
 
-		let periodosNegociacao = [];
-
-		periodosNegociacao.push(negociacoesWS.getNegociacoesSemana());
-		periodosNegociacao.push(negociacoesWS.getNegociacoesSemanaAnterior());
-		periodosNegociacao.push(negociacoesWS.getNegociacoesSemanaRetrasada());
-
-		Promise.all(periodosNegociacao)
+		negociacoesWS.getNegociacoes()
+			.then(negociacoes =>
+				negociacoes.filter(negociacao => 
+					!this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
+						JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)
+					)	
+				)	
+			)
 			.then(negociacoes => {
-				//console.log('Promise.all.then = ' + negociacoes);
-
-				negociacoes
-					.reduce((arrayAchatado, array) => arrayAchatado.concat(array, []))
-					.forEach(negociacao => this._listaNegociacoes.adicionar(negociacao));
-
-				this._mensagem.texto = "Negociações adicionadas com sucesso";
+				negociacoes.forEach(negociacao => {
+					this._listaNegociacoes.adicionar(negociacao);
+					this._mensagem.texto = 'Negotiation Added';
+				})
 			})
-			.catch(errorMsg => this._mensagem.texto = errorMsg);
+			.catch(error => this._mensagem.texto = error);
 	
 	}
 
