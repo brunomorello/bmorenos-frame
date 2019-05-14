@@ -1,90 +1,91 @@
-class NegociacaoDao {
+'use strict';
 
-    constructor(connection) {
-        
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NegociacaoDao = function () {
+    function NegociacaoDao(connection) {
+        _classCallCheck(this, NegociacaoDao);
+
         this._connection = connection;
         this._store = 'negotiations';
-
     }
 
-    add(negotiation) {
+    _createClass(NegociacaoDao, [{
+        key: 'add',
+        value: function add(negotiation) {
+            var _this = this;
 
-        return new Promise((resolve, reject) => {
+            return new Promise(function (resolve, reject) {
 
-            let request = this._connection
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .add(negotiation);
-            
-            request.onsuccess = e => {
-                //console.log(`success to insert object`); 
-                resolve();
-            };
+                var request = _this._connection.transaction([_this._store], 'readwrite').objectStore(_this._store).add(negotiation);
 
-            request.onerror = e => {
-                reject(`Error to Insert Object ${e.target.error}`);
-            }
+                request.onsuccess = function (e) {
+                    //console.log(`success to insert object`); 
+                    resolve();
+                };
 
-        });
+                request.onerror = function (e) {
+                    reject('Error to Insert Object ' + e.target.error);
+                };
+            });
+        }
+    }, {
+        key: 'getLocalNegotiations',
+        value: function getLocalNegotiations() {
+            var _this2 = this;
 
-    }
+            return new Promise(function (resolve, reject) {
 
-    getLocalNegotiations() {
+                var request = _this2._connection.transaction([_this2._store], 'readwrite').objectStore(_this2._store).openCursor();
 
-        return new Promise((resolve, reject) => {
+                var negotiationsList = [];
 
-            let request = this._connection
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .openCursor();
+                request.onsuccess = function (e) {
 
-            let negotiationsList = [];
+                    var currentPosition = e.target.result;
 
-            request.onsuccess = e => {
+                    if (currentPosition) {
+                        // storing current negotiation
+                        var negotiation = currentPosition.value;
 
-                let currentPosition = e.target.result;
+                        // pushing it to array
+                        negotiationsList.push(new Negociacao(negotiation._data, negotiation._quantidade, negotiation._valor));
 
-                if(currentPosition) {
-                    // storing current negotiation
-                    let negotiation = currentPosition.value;
+                        // moving cursor
+                        currentPosition.continue();
+                    } else {
+                        // when finishes read list, resolve this Promise
+                        resolve(negotiationsList);
+                    }
+                };
 
-                    // pushing it to array
-                    negotiationsList.push(new Negociacao(negotiation._data, negotiation._quantidade, negotiation._valor));
+                request.onerror = function (e) {
+                    reject('Error to Get Local Negotiations ' + e.target.error);
+                };
+            });
+        }
+    }, {
+        key: 'deleteAllLocalNegotiations',
+        value: function deleteAllLocalNegotiations() {
+            var _this3 = this;
 
-                    // moving cursor
-                    currentPosition.continue();
+            return new Promise(function (resolve, reject) {
 
-                } else {
-                    // when finishes read list, resolve this Promise
-                    resolve(negotiationsList);
-                }
-                
-            };
-            
+                var request = _this3._connection.transaction([_this3._store], 'readwrite').objectStore(_this3._store).clear();
 
-            request.onerror = e => {
-                reject(`Error to Get Local Negotiations ${e.target.error}`);
-            };
+                request.onsuccess = function (e) {
+                    return resolve('Success to delete all negotiations stored locally');
+                };
 
-        })
+                request.onerror = function (e) {
+                    return reject('Error to delete all negotiations stored locally ' + e.target.error);
+                };
+            });
+        }
+    }]);
 
-    }
-
-    deleteAllLocalNegotiations() {
-
-        return new Promise((resolve, reject) => {
-
-            let request = this._connection
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .clear();
-
-            request.onsuccess = e => resolve('Success to delete all negotiations stored locally');
-
-            request.onerror = e => reject(`Error to delete all negotiations stored locally ${e.target.error}`);
-
-        })
-
-    }
-
-}
+    return NegociacaoDao;
+}();
+//# sourceMappingURL=NegociacaoDao.js.map

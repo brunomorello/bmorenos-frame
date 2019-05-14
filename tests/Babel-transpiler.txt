@@ -1,0 +1,17 @@
+https://babeljs.io/
+
+1 - Access Project Path and init npm    
+    npm init
+
+2 - Install Babel Cli
+    npm install babel-cli@6.10.1 --save-dev
+
+3 - Install Babel preset
+    npm install babel-preset-es2015@6.9.0 --save-dev
+
+4 - Enable Babel Watcher
+    Add the watcher on packge.json:
+
+        "watch": "babel js/app-es6 -d js/app --source-maps --watch"
+    
+    Run npm run watch

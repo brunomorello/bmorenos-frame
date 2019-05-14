@@ -1,9 +1,15 @@
-class NegociacaoController {
+"use strict";
 
-	constructor() {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NegociacaoController = function () {
+	function NegociacaoController() {
+		_classCallCheck(this, NegociacaoController);
 
 		// um alias igual existe o $ do JQuery
-		let selector = document.querySelector.bind(document);
+		var selector = document.querySelector.bind(document);
 
 		this._inputData = selector("#data");
 		this._inputQuantidade = selector("#quantidade");
@@ -15,121 +21,117 @@ class NegociacaoController {
 		this._ordemAtual = '';
 
 		//Tecnica de data binding (associação de dados)
-		this._listaNegociacoes = new Bind(
-			new ListaNegociacoes(),
-			new NegociacoesView(selector("#NegociacoesView")),
-			'adicionar', 'esvaziar', 'ordena', 'inverteOrdem'
-		);
+		this._listaNegociacoes = new Bind(new ListaNegociacoes(), new NegociacoesView(selector("#NegociacoesView")), 'adicionar', 'esvaziar', 'ordena', 'inverteOrdem');
 
-		this._mensagem = new Bind(
-			new Mensagem(),
-			new MensagemView(selector("#MensagemView")),
-			'texto'
-		);
+		this._mensagem = new Bind(new Mensagem(), new MensagemView(selector("#MensagemView")), 'texto');
 
 		// API for trades
 		this._service = new NegociacaoService();
 
 		this._init();
-
 	}
 
-	_init() {
+	_createClass(NegociacaoController, [{
+		key: "_init",
+		value: function _init() {
+			var _this = this;
 
-		// lists all trades stored locally
-		this._service.listar()
-				.then(negociacoes => 
-					negociacoes.forEach(negociacao =>
-						this._listaNegociacoes.adicionar(negociacao)
-					)
-				)
-			.catch(error => this._mensagem.texto = error);
+			// lists all trades stored locally
+			this._service.listar().then(function (negociacoes) {
+				return negociacoes.forEach(function (negociacao) {
+					return _this._listaNegociacoes.adicionar(negociacao);
+				});
+			}).catch(function (error) {
+				return _this._mensagem.texto = error;
+			});
 
-		// Set a Time interval to import negotiations
-		setInterval(() => {
+			// Set a Time interval to import negotiations
+			setInterval(function () {
 
-			this.importaNegociacoes();
-
-		}, 5000);
-
-	}
-
-	adiciona(event) {
-		
-		event.preventDefault();	
-
-		// new trade created
-		let negociacao = this._criarNegociacao();
-
-		// adding trade using API
-		this._service.adicionar(negociacao)
-			.then((msg) => {
-				this._listaNegociacoes.adicionar(negociacao);
-				this._mensagem.texto = msg;
-				this._limpaFormulario();
-			})
-			.catch(error => this._mensagem.texto = error);		
-
-	}
-
-	apagar() {
-
-		// clean all trades on list of trades
-		this._service.removerTodas()
-			.then((msg) => {
-				this._listaNegociacoes.esvaziar();
-				this._listaNegociacoes.texto = msg;
-			})
-			.catch(error => this._mensagem.texto = error);
-
-	}
-
-	importaNegociacoes() {
-
-		// o motivo de usar let:
-		// usamos var quando queremos que a variável tenha escopo global ou de função
-		// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
-
-		this._service.importarDaAPI(this._listaNegociacoes)
-			.then(negociacoes => {
-				negociacoes.forEach(negociacao => {
-					this._listaNegociacoes.adicionar(negociacao);
-				})
-			})
-			.catch(error => this._mensagem.texto = error);	
-	
-	}
-
-	ordena(coluna) {
-
-		if(this._ordemAtual == coluna) {
-			this._listaNegociacoes.inverteOrdem();
-		} else {
-			this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);
+				_this.importaNegociacoes();
+			}, 5000);
 		}
+	}, {
+		key: "adiciona",
+		value: function adiciona(event) {
+			var _this2 = this;
 
-		this._ordemAtual = coluna;
+			event.preventDefault();
 
-	}
+			// new trade created
+			var negociacao = this._criarNegociacao();
 
-	_criarNegociacao() {
+			// adding trade using API
+			this._service.adicionar(negociacao).then(function (msg) {
+				_this2._listaNegociacoes.adicionar(negociacao);
+				_this2._mensagem.texto = msg;
+				_this2._limpaFormulario();
+			}).catch(function (error) {
+				return _this2._mensagem.texto = error;
+			});
+		}
+	}, {
+		key: "apagar",
+		value: function apagar() {
+			var _this3 = this;
 
-		return new Negociacao (
-			DateHelper.textToDate(this._inputData.value),
-			parseInt(this._inputQuantidade.value),
-			parseFloat(this._inputValor.value)
-		);
+			// clean all trades on list of trades
+			this._service.removerTodas().then(function (msg) {
+				_this3._listaNegociacoes.esvaziar();
+				_this3._listaNegociacoes.texto = msg;
+			}).catch(function (error) {
+				return _this3._mensagem.texto = error;
+			});
+		}
+	}, {
+		key: "importaNegociacoes",
+		value: function importaNegociacoes() {
+			var _this4 = this;
 
-	}
+			// o motivo de usar let:
+			// usamos var quando queremos que a variável tenha escopo global ou de função
+			// usarmos let quando queremos que a variável tenha sempre escopo de bloco. 
 
-	_limpaFormulario() {
+			this._service.importarDaAPI(this._listaNegociacoes).then(function (negociacoes) {
+				negociacoes.forEach(function (negociacao) {
+					_this4._listaNegociacoes.adicionar(negociacao);
+				});
+			}).catch(function (error) {
+				return _this4._mensagem.texto = error;
+			});
+		}
+	}, {
+		key: "ordena",
+		value: function ordena(coluna) {
 
-		this._inputData.value = "";
-		this._inputQuantidade.value = 1;
-		this._inputValor.value = 0.0;
+			if (this._ordemAtual == coluna) {
+				this._listaNegociacoes.inverteOrdem();
+			} else {
+				this._listaNegociacoes.ordena(function (a, b) {
+					return a[coluna] - b[coluna];
+				});
+			}
 
-		this._inputData.focus();
+			this._ordemAtual = coluna;
+		}
+	}, {
+		key: "_criarNegociacao",
+		value: function _criarNegociacao() {
 
-	}
+			return new Negociacao(DateHelper.textToDate(this._inputData.value), parseInt(this._inputQuantidade.value), parseFloat(this._inputValor.value));
+		}
+	}, {
+		key: "_limpaFormulario",
+		value: function _limpaFormulario() {
 
-}
+			this._inputData.value = "";
+			this._inputQuantidade.value = 1;
+			this._inputValor.value = 0.0;
+
+			this._inputData.focus();
+		}
+	}]);
+
+	return NegociacaoController;
+}();
+//# sourceMappingURL=NegociacaoController.js.map
