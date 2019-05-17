@@ -1,9 +1,9 @@
 "use strict";
 
-System.register(["./View", "../helpers/DateHelper"], function (_export, _context) {
+System.register(["./View", "../helpers/DateHelper", "../controllers/NegociacaoController"], function (_export, _context) {
 		"use strict";
 
-		var View, DateHelper, _createClass, NegociacoesView;
+		var View, DateHelper, currentInstance, _createClass, NegociacoesView;
 
 		function _classCallCheck(instance, Constructor) {
 				if (!(instance instanceof Constructor)) {
@@ -40,6 +40,8 @@ System.register(["./View", "../helpers/DateHelper"], function (_export, _context
 						View = _View2.View;
 				}, function (_helpersDateHelper) {
 						DateHelper = _helpersDateHelper.DateHelper;
+				}, function (_controllersNegociacaoController) {
+						currentInstance = _controllersNegociacaoController.currentInstance;
 				}],
 				execute: function () {
 						_createClass = function () {
@@ -63,10 +65,23 @@ System.register(["./View", "../helpers/DateHelper"], function (_export, _context
 						_export("NegociacoesView", NegociacoesView = function (_View) {
 								_inherits(NegociacoesView, _View);
 
-								function NegociacoesView() {
+								function NegociacoesView(elemento) {
 										_classCallCheck(this, NegociacoesView);
 
-										return _possibleConstructorReturn(this, (NegociacoesView.__proto__ || Object.getPrototypeOf(NegociacoesView)).apply(this, arguments));
+										var _this = _possibleConstructorReturn(this, (NegociacoesView.__proto__ || Object.getPrototypeOf(NegociacoesView)).call(this, elemento));
+
+										// added an event listener to click event
+										elemento.addEventListener('click', function (event) {
+
+												// checks if the element who receives the event is a th tag <th>
+												if (event.target.nodeName == 'TH') {
+
+														// sorts the value 
+														currentInstance().ordena(event.target.textContent.toLowerCase());
+												}
+										});
+
+										return _this;
 								}
 
 								_createClass(NegociacoesView, [{
@@ -76,7 +91,7 @@ System.register(["./View", "../helpers/DateHelper"], function (_export, _context
 												// Nesse template é usado a função reduce() [Array.prototype.reduce(function(acumulador, valorAtual, indice, array){ } )]
 												// https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 
-												return "\n\t\t    <table class=\"table table-hover table-bordered\">\n\t\t        <thead>\n\t\t            <tr>\n\t\t                <th onclick=\"negociacaoController.ordena('data')\">DATA</th>\n\t\t                <th onclick=\"negociacaoController.ordena('quantidade')\">QUANTIDADE</th>\n\t\t                <th onclick=\"negociacaoController.ordena('valor')\">VALOR</th>\n\t\t                <th onclick=\"negociacaoController.ordena('volume')\">VOLUME</th>\n\t\t            </tr>\n\t\t        </thead>\n\t\t        \n\t\t        <tbody>\n\n\t\t        \t" + model.negociacoes.map(function (n) {
+												return "\n\t\t    <table class=\"table table-hover table-bordered\">\n\t\t        <thead>\n\t\t            <tr>\n\t\t                <th>DATA</th>\n\t\t                <th>QUANTIDADE</th>\n\t\t                <th>VALOR</th>\n\t\t                <th>VOLUME</th>\n\t\t            </tr>\n\t\t        </thead>\n\t\t        \n\t\t        <tbody>\n\n\t\t        \t" + model.negociacoes.map(function (n) {
 														return "\n\t\t        \t\t\t<tr>\n\t\t        \t\t\t\t<td>" + DateHelper.dateToText(n.data) + "</td>\n\t\t        \t\t\t\t<td>" + n.quantidade + "</td>\n\t\t        \t\t\t\t<td>" + n.valor + "</td>\n\t\t        \t\t\t\t<td>" + n.volume + "</td>\n\t\t        \t\t\t</tr>\n\t\t        \t\t";
 												}) + "\n\n\t\t        </tbody>\n\t\t        \n\t\t        <tfoot>\n\t\t        \t<td colspan=\"3\"></td>\n\t\t        \t<td>\n\t\t        \t\t" + model.volumeTotal + "\n\t\t        \t</td>\n\t\t        </tfoot>\n\t\t    </table>\n\t\t";
 										}

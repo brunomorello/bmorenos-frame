@@ -3,13 +3,13 @@
 System.register(["../../node_modules/core-js/modules/es7.string.pad-start", "../../node_modules/core-js/modules/es7.string.pad-end", "./controllers/NegociacaoController"], function (_export, _context) {
   "use strict";
 
-  var NegociacaoController, negociacaoController;
+  var currentInstance, negociacaoController;
   return {
     setters: [function (_node_modulesCoreJsModulesEs7StringPadStart) {}, function (_node_modulesCoreJsModulesEs7StringPadEnd) {}, function (_controllersNegociacaoController) {
-      NegociacaoController = _controllersNegociacaoController.NegociacaoController;
+      currentInstance = _controllersNegociacaoController.currentInstance;
     }],
     execute: function () {
-      negociacaoController = new NegociacaoController();
+      negociacaoController = currentInstance();
 
 
       document.querySelector('.form').onsubmit = negociacaoController.adiciona.bind(negociacaoController);

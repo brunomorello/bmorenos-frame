@@ -3,13 +3,19 @@
 System.register(["../models/ListaNegociacoes", "../models/Mensagem", "../models/Negociacao", "../views/NegociacoesView", "../views/MensagemView", "../services/NegociacaoService", "../helpers/DateHelper", "../helpers/Bind"], function (_export, _context) {
 	"use strict";
 
-	var ListaNegociacoes, Mensagem, Negociacao, NegociacoesView, MensagemView, NegociacaoService, DateHelper, Bind, _createClass, NegociacaoController;
+	var ListaNegociacoes, Mensagem, Negociacao, NegociacoesView, MensagemView, NegociacaoService, DateHelper, Bind, _createClass, NegociacaoController, negociacaoController;
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
 			throw new TypeError("Cannot call a class as a function");
 		}
 	}
+
+	function currentInstance() {
+		return negociacaoController;
+	}
+
+	_export("currentInstance", currentInstance);
 
 	return {
 		setters: [function (_modelsListaNegociacoes) {
@@ -48,7 +54,7 @@ System.register(["../models/ListaNegociacoes", "../models/Mensagem", "../models/
 				};
 			}();
 
-			_export("NegociacaoController", NegociacaoController = function () {
+			NegociacaoController = function () {
 				function NegociacaoController() {
 					_classCallCheck(this, NegociacaoController);
 
@@ -177,9 +183,9 @@ System.register(["../models/ListaNegociacoes", "../models/Mensagem", "../models/
 				}]);
 
 				return NegociacaoController;
-			}());
+			}();
 
-			_export("NegociacaoController", NegociacaoController);
+			negociacaoController = new NegociacaoController();
 		}
 	};
 });
