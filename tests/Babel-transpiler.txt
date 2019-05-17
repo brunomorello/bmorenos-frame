@@ -15,3 +15,15 @@ https://babeljs.io/
         "watch": "babel js/app-es6 -d js/app --source-maps --watch"
     
     Run npm run watch
+
+5 - Install systemjs loader
+
+    npm install systemjs@0.19.31 --save
+
+6 - Install babel pollyfill
+
+    npm install @babel/polyfill --save
+
+7 - Compile Babel
+
+    npm run build
