@@ -1,10 +1,17 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.NegociacaoDao = undefined;
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Negociacao = require('../models/Negociacao');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var NegociacaoDao = function () {
+var NegociacaoDao = exports.NegociacaoDao = function () {
     function NegociacaoDao(connection) {
         _classCallCheck(this, NegociacaoDao);
 
@@ -51,7 +58,7 @@ var NegociacaoDao = function () {
                         var negotiation = currentPosition.value;
 
                         // pushing it to array
-                        negotiationsList.push(new Negociacao(negotiation._data, negotiation._quantidade, negotiation._valor));
+                        negotiationsList.push(new _Negociacao.Negociacao(negotiation._data, negotiation._quantidade, negotiation._valor));
 
                         // moving cursor
                         currentPosition.continue();

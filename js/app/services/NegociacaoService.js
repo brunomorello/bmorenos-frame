@@ -1,10 +1,23 @@
-'use strict';
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.NegociacaoService = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _HttpService = require("./HttpService");
+
+var _ConnectionFactory = require("./ConnectionFactory");
+
+var _NegociacaoDao = require("../dao/NegociacaoDao");
+
+var _Negociacao = require("../models/Negociacao");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var NegociacaoService = function () {
+var NegociacaoService = exports.NegociacaoService = function () {
 
 	/*
  	Recebe uma função callback baseada em Error-First-Callback
@@ -52,11 +65,11 @@ var NegociacaoService = function () {
 	function NegociacaoService() {
 		_classCallCheck(this, NegociacaoService);
 
-		this._httpService = new HttpService();
+		this._httpService = new _HttpService.HttpService();
 	}
 
 	_createClass(NegociacaoService, [{
-		key: 'getNegociacoesSemana',
+		key: "getNegociacoesSemana",
 		value: function getNegociacoesSemana() {
 			var _this = this;
 
@@ -69,7 +82,7 @@ var NegociacaoService = function () {
 					//console.log(negociacoes);
 
 					resolve(negociacoes.map(function (objeto) {
-						return new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
+						return new _Negociacao.Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
 					}));
 				}).catch(function (errorMsg) {
 					console.log(errorMsg);
@@ -79,7 +92,7 @@ var NegociacaoService = function () {
 			});
 		}
 	}, {
-		key: 'getNegociacoesSemanaAnterior',
+		key: "getNegociacoesSemanaAnterior",
 		value: function getNegociacoesSemanaAnterior() {
 			var _this2 = this;
 
@@ -92,7 +105,7 @@ var NegociacaoService = function () {
 					//console.log(negociacoes)
 
 					resolve(negociacoes.map(function (objeto) {
-						return new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
+						return new _Negociacao.Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
 					}));
 				}).catch(function (errorMsg) {
 					console.log(errorMsg);
@@ -102,7 +115,7 @@ var NegociacaoService = function () {
 			});
 		}
 	}, {
-		key: 'getNegociacoesSemanaRetrasada',
+		key: "getNegociacoesSemanaRetrasada",
 		value: function getNegociacoesSemanaRetrasada() {
 			var _this3 = this;
 
@@ -115,7 +128,7 @@ var NegociacaoService = function () {
 					//console.log(negociacoes);
 
 					resolve(negociacoes.map(function (objeto) {
-						return new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
+						return new _Negociacao.Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor);
 					}));
 				}).catch(function (errorMsg) {
 					console.log(errorMsg);
@@ -125,7 +138,7 @@ var NegociacaoService = function () {
 			});
 		}
 	}, {
-		key: 'getNegociacoes',
+		key: "getNegociacoes",
 		value: function getNegociacoes() {
 
 			return Promise.all([this.getNegociacoesSemana(), this.getNegociacoesSemanaAnterior(), this.getNegociacoesSemanaRetrasada()]).then(function (periodos) {
@@ -133,7 +146,7 @@ var NegociacaoService = function () {
 				var negociacoes = periodos.reduce(function (dados, periodo) {
 					return dados.concat(periodo, []);
 				}).map(function (dado) {
-					return new Negociacao(new Date(dado.data), dado.quantidade, dado.valor);
+					return new _Negociacao.Negociacao(new Date(dado.data), dado.quantidade, dado.valor);
 				});
 
 				return negociacoes;
@@ -142,39 +155,39 @@ var NegociacaoService = function () {
 			});
 		}
 	}, {
-		key: 'adicionar',
+		key: "adicionar",
 		value: function adicionar(negociacao) {
 
-			return ConnectionFactory.getConnection().then(function (connection) {
-				return new NegociacaoDao(connection);
+			return _ConnectionFactory.ConnectionFactory.getConnection().then(function (connection) {
+				return new _NegociacaoDao.NegociacaoDao(connection);
 			}).then(function (dao) {
 				return dao.add(negociacao);
 			}).then(function () {
 				return 'Negociação cadastrada com sucesso';
 			}).catch(function (error) {
 
-				console.log('Error to create a new trade ' + error);
+				console.log("Error to create a new trade " + error);
 
 				throw new Error('Erro para cadastrar uma nova negociação');
 			});
 		}
 	}, {
-		key: 'removerTodas',
+		key: "removerTodas",
 		value: function removerTodas() {
 
-			return ConnectionFactory.getConnection().then(function (connection) {
-				return new NegociacaoDao(connection);
+			return _ConnectionFactory.ConnectionFactory.getConnection().then(function (connection) {
+				return new _NegociacaoDao.NegociacaoDao(connection);
 			}).then(function (dao) {
 				return dao.deleteAllLocalNegotiations();
 			}).then(function () {
 				return 'Foram removidas todas as negociações';
 			}).catch(function (error) {
-				console.log('Error to delete Negotiations ' + error);
+				console.log("Error to delete Negotiations " + error);
 				throw new Error('Erro para apagar as Negociações');
 			});
 		}
 	}, {
-		key: 'listar',
+		key: "listar",
 		value: function listar() {
 
 			// Fillout Negotiations List with Local Data
@@ -192,17 +205,17 @@ var NegociacaoService = function () {
    				})
    */
 
-			return ConnectionFactory.getConnection().then(function (connection) {
-				return new NegociacaoDao(connection);
+			return _ConnectionFactory.ConnectionFactory.getConnection().then(function (connection) {
+				return new _NegociacaoDao.NegociacaoDao(connection);
 			}).then(function (dao) {
 				return dao.getLocalNegotiations();
 			}).catch(function (error) {
-				console.log('Error to get Local Negotiations ' + error);
+				console.log("Error to get Local Negotiations " + error);
 				throw new Error('Erro para carregar Negociações Localmente');
 			});
 		}
 	}, {
-		key: 'importarDaAPI',
+		key: "importarDaAPI",
 		value: function importarDaAPI(listaNegociacoes) {
 
 			return this.getNegociacoes().then(function (negociacoes) {
@@ -212,7 +225,7 @@ var NegociacaoService = function () {
 					});
 				});
 			}).catch(function (error) {
-				console.log('Error to import trades from API ' + error);
+				console.log("Error to import trades from API " + error);
 				throw new Error('Erro para importar as negociações através da API');
 			});
 		}
